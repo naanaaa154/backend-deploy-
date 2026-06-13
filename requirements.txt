@@ -1,21 +1,54 @@
-﻿bcrypt
-fastapi
-FlashRank
-groq
-httpcore
-httptools
-httpx
-langchain
-langgraph
-langsmith
-ollama
-pgvector
-psycopg
-pydantic
-PyJWT
-regex
-requests
-SQLAlchemy
-tiktoken
-tokenizers
-uvicorn
+
+# Trimmed requirements: only direct dependencies used by the application and evaluation
+fastapi==0.128.0
+uvicorn==0.40.0
+SQLAlchemy==2.0.45
+pydantic==2.12.5
+pydantic-settings==2.12.0
+python-dotenv==1.2.1
+
+# Postgres / DB
+psycopg==3.3.2
+psycopg-pool==3.3.0
+pgvector==0.3.6
+
+# Authentication
+bcrypt==5.0.0
+PyJWT==2.10.1
+python-multipart==0.0.21
+
+# Langchain / LLM integrations used in code
+langchain-core==1.4.0
+langchain-experimental==0.0.59
+langchain-postgres==0.0.16
+langchain-groq==1.1.2
+langchain-ollama==1.0.1
+langchain-text-splitters==1.1.0
+
+# LangGraph (conversation memory)
+langgraph==1.0.7
+langgraph-checkpoint-postgres==3.0.3
+
+# LangSmith / evaluation helpers
+langsmith==0.6.5
+ragas==0.4.3
+datasets==4.5.0
+
+# Optional / helper libraries used directly in code
+FlashRank==0.2.10
+
+# Utilities and runtime expectations
+requests==2.32.5
+orjson==3.11.5
+tqdm==4.67.1
+
+# Keep tokenizers/tiktoken if any LLM backends expect them
+tiktoken==0.12.0
+tokenizers==0.22.2
+
+# Keep minimal typing/runtime helpers
+typing_extensions==4.15.0
+
+# Keep testing tools
+pytest==9.0.2
+
