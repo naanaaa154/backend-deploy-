@@ -5,6 +5,7 @@ from app.core.langsmith import init_langsmith
 from app.core.database import Base, engine
 from app.user.models.user import User
 from app.rag.models.transcript import Transcript
+from mangum import Mangum  # 1. <--- TAMBAHKAN IMPORT INI
 
 # Inisialisasi LangSmith SEBELUM mengimpor router/services yang menginisialisasi LLM
 try:
@@ -35,10 +36,14 @@ def ensure_transcript_optional_columns() -> None:
         print(f"Warning: failed to ensure transcript optional columns: {e}")
 
 
-
 # Buat tabel database jika belum ada
-Base.metadata.create_all(bind=engine)
-ensure_transcript_optional_columns()
+try:
+    Base.metadata.create_all(bind=engine)
+    ensure_transcript_optional_columns()
+except Exception as e:
+    # Dibungkus try-except agar jika database cloud kamu belum connect / lambat, 
+    # build Vercel tidak langsung mati total (crash).
+    print(f"Database setup warning: {e}")
 
 
 app = FastAPI(title="Meeting RAG System")
@@ -58,3 +63,6 @@ app.include_router(transcript_router)
 
 app.include_router(auth_router, prefix='/api')
 app.include_router(user_router, prefix='/api', tags=['Users'])
+
+# 2. <--- TAMBAHKAN BARIS INI DI PALING BAWAH
+handler = Mangum(app)
