@@ -47,4 +47,5 @@ tokenizers==0.22.2
 # Keep minimal typing/runtime helpers
 typing_extensions==4.15.0
 
+email-validator==2.3.0
 
