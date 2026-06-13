@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str
 
+    # External rerank endpoint (optional)
+    RERANK_ENDPOINT: str | None = None
+
     # Security
     JWT_SECRET_KEY: str
 

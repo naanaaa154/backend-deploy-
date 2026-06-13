@@ -3,6 +3,9 @@ from typing import List, Optional, Any
 from langchain_core.documents import Document
 
 from app.vectorstore.pgvector import get_vectorstore
+from app.core.config import settings
+import requests
+from requests.exceptions import RequestException
 
 
 try:
@@ -249,12 +252,35 @@ class DocumentRetriever:
             for i, doc in enumerate(candidates)
         ]
 
-        rerank_request = RerankRequest(
-            query=query,
-            passages=passages,
-        )
+        # If external rerank endpoint is configured, prefer calling it.
+        results = None
+        if settings.RERANK_ENDPOINT:
+            try:
+                payload = {
+                    "query": query,
+                    "passages": passages,
+                }
+                resp = requests.post(settings.RERANK_ENDPOINT, json=payload, timeout=10)
+                resp.raise_for_status()
+                # Expecting a JSON array of results: [{"id":..., "text":..., "score":..., "meta": {...}}, ...]
+                results = resp.json()
+            except RequestException as re:
+                print(f"External rerank endpoint failed: {re}. Falling back to internal reranker if available.")
+            except ValueError as ve:
+                print(f"Invalid JSON from rerank endpoint: {ve}. Falling back to internal reranker if available.")
 
-        results = ranker.rerank(rerank_request)
+        # If external didn't produce results, try using the local ranker (flashrank) if available.
+        if results is None:
+            try:
+                rerank_request = RerankRequest(
+                    query=query,
+                    passages=passages,
+                )
+
+                results = ranker.rerank(rerank_request)
+            except Exception as e:
+                # Propagate exception to outer handler which will fallback to vector search
+                raise
         final_docs: List[Document] = []
 
         for res in results:

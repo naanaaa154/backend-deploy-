@@ -39,7 +39,9 @@ class ChatService:
     def __init__(self):
         # Initialize Ranker (only once)
         # Using a small/fast model by default
-        if HAS_FLASHRANK:
+        # If an external rerank endpoint is configured, prefer using it and
+        # avoid loading local cross-encoder models (which are cached under ./models).
+        if HAS_FLASHRANK and not settings.RERANK_ENDPOINT:
             # Cross-encoder re-ranking untuk meningkatkan kualitas dokumen hasil vector search.
             # Retrieval intent: TinyBERT (lebih cepat)
             # Metadata intent: MiniLM (kualitas lebih baik)
@@ -52,15 +54,16 @@ class ChatService:
                 cache_dir="./models",
             )
             self._metadata_ranker = Ranker(
-                    model_name="ms-marco-MiniLM-L-12-v2",
-                    cache_dir="./models",
-                )
+                model_name="ms-marco-MiniLM-L-12-v2",
+                cache_dir="./models",
+            )
             self._summary_ranker = Ranker(
-                    model_name="ms-marco-MiniLM-L-12-v2",
-                    cache_dir="./models",
-                )
-
+                model_name="ms-marco-MiniLM-L-12-v2",
+                cache_dir="./models",
+            )
         else:
+            # Either flashrank isn't installed or an external rerank endpoint is set;
+            # do not initialize local ranker models to avoid populating ./models.
             self._retrieval_ranker = None
             self._retrieval_fallback_ranker = None
             self._metadata_ranker = None
