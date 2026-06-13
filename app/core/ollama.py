@@ -47,5 +47,5 @@ def get_classifier_llm():
 def get_embedding():
     return OllamaEmbeddings(
         model=settings.OLLAMA_EMBEDDING_MODEL,
-        base_url=settings.OLLAMA_BASE_URL
+        base_url=settings.OLLAMA_BASE_NGROK_URL
     )
