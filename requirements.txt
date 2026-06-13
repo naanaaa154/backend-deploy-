@@ -18,12 +18,12 @@ PyJWT==2.10.1
 python-multipart==0.0.21
 
 # Langchain / LLM integrations used in code
-langchain-core==1.4.0
-langchain-experimental==0.0.59
-langchain-postgres==0.0.16
-langchain-groq==1.1.2
-langchain-ollama==1.0.1
-langchain-text-splitters==1.1.0
+langchain-core>=0.3
+langchain-experimental
+langchain-postgres
+langchain-groq
+langchain-ollama
+langchain-text-splitters
 
 # LangGraph (conversation memory)
 langgraph==1.0.7
