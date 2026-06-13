@@ -166,7 +166,7 @@ def extract_history_and_query(
     return history, query
 
 
-def trim_history(history_messages: List[BaseMessage], max_messages: int = 0) -> List[BaseMessage]:
+def trim_history(history_messages: List[BaseMessage], max_messages: int = 2) -> List[BaseMessage]:
     # Batasi history yang disertakan agar prompt tetap pendek.
     if not history_messages:
         return []
