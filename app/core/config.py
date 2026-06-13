@@ -6,9 +6,12 @@ class Settings(BaseSettings):
     OLLAMA_LLM_MODEL: str
     OLLAMA_EMBEDDING_MODEL: str
     # OLLAMA_CLASSIFIER_MODEL: str
+    
 
     # LLM Provider
     LLM_PROVIDER: str = "ollama"
+
+    OLLAMA_BASE_NGROK_URL: str
 
     # Groq
     GROQ_API_KEY: str | None = None
