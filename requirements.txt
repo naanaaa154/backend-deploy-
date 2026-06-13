@@ -31,8 +31,6 @@ langgraph-checkpoint-postgres==3.0.3
 
 # LangSmith / evaluation helpers
 langsmith==0.6.5
-ragas==0.4.3
-datasets==4.5.0
 
 # Optional / helper libraries used directly in code
 FlashRank==0.2.10
@@ -49,6 +47,4 @@ tokenizers==0.22.2
 # Keep minimal typing/runtime helpers
 typing_extensions==4.15.0
 
-# Keep testing tools
-pytest==9.0.2
 
